@@ -9,6 +9,8 @@
   <script src="index.js"></script>
   <meta charset="utf-8" />
 
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+
   <title>Homepage</title>
 </head>
 
@@ -22,8 +24,7 @@
   <!-- Example of styling an element -->
   <!-- svg_element.style()-->
 
-  <div id="bar_chart_title"></div>
-  <div id="sentences"></div>
+  <div id="sentences" class="table-responsive"></div>
   <div id="tooltip"></div>
 
   <script>
@@ -65,11 +66,6 @@
 
     d3.dsv(",", pathToCsv, function (d) {
       return {
-        // format data attributes if required
-        // name: d.name,
-        // year: +d.year,
-        // Rating: Math.floor(+d["average_rating"]),
-        // Rated: +d["users_rated"],
         input_string: d.input_string,
         lewd: d.lewd,
         offensive: d.offensive,
@@ -78,13 +74,14 @@
       };
     })
       .then(function (data) {
-        console.log("data", data); // you should see the data in your browser's developer tools console
+        // you should see the data in your browser's developer tools console
+        console.log("data", data);
 
         // count the number of different stereotypes
-        var lewd = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
-        var offensive = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
-        var intent = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
-        var group = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
+        var lewd = [];
+        var offensive = [];
+        var intent = [];
+        var group = [];
 
         var dict = [
           { type: "Lewd", count: 0, input: [], color: 0, label: 0 },
@@ -127,8 +124,17 @@
         max_count = Math.max(Math.max(Math.max(dict[0].count, dict[1].count), dict[2].count), dict[3].count);
         console.log("dict", dict);
 
-        function makeTableHTML(myArray) {
-          var result = "<table border=1>";
+        function makeTableHTML(myArray, type) {
+          var result = '<table class="table table-striped"><caption>Sample texts classified as "' + type + '"</caption>';
+          result +=
+            '<thead><tr>\
+            <th scope="col">#</th>\
+            <th scope="col">Input Sentence</th>\
+            <th scope="col">Lewd</th>\
+            <th scope="col">Offensive</th>\
+            <th scope="col">Intent</th>\
+            <th scope="col">Group</th>\
+            </tr></thead>';
           for (var i = 0; i < myArray.length; i++) {
             result += "<tr>";
             for (var j = 0; j < myArray[i].length; j++) {
@@ -141,10 +147,10 @@
           return result;
         }
 
-        lewd = makeTableHTML(lewd);
-        offensive = makeTableHTML(offensive);
-        intent = makeTableHTML(intent);
-        group = makeTableHTML(group);
+        lewd = makeTableHTML(lewd, "lewd");
+        offensive = makeTableHTML(offensive, "offensive");
+        intent = makeTableHTML(intent, "intent");
+        group = makeTableHTML(group, "group");
 
         // 这行以上全是数据处理
 
@@ -195,32 +201,11 @@
             d3.select("#tooltip").transition().duration(500).style("opacity", 0).style("display", "none");
           })
           .on("click", function (d) {
-            d3.select("#bar_chart_title").style("display", "block");
             d3.select("#sentences").style("display", "block");
             d3.select("#bar_chart").style("display", "block");
             d3.select("#bar_chart").selectAll("*").style("display", "block");
             drawDetails(eval(d.type.toLowerCase()), d.type.toLowerCase());
           });
-
-        // .on("mouseover", function (d) {
-        //   // enlarge circle to show selected
-        //   d3.select(this).style("fill", (d) => color[3]);
-        //   drawDetails(d.key, d.rating_id);
-
-        //   // draw bar chart
-        //   // if (d.count != 0) {
-        // d3.select("#bar_chart").style("display", "block");
-        // d3.select("#bar_chart").selectAll("*").style("display", "block");
-
-        //   // drawDetails(d.key, d.rating_id);
-        //   // }
-        // })
-        // .on("mouseout", function (d) {
-        //   d3.select(this).style("fill", (d) => color[d.color]);
-        //   // d3.select("#bar_chart").style("display", "none");
-        //   // d3.select("#bar_chart").selectAll("*").style("display", "none");
-        //   // d3.select("#bars").selectAll("*").exit().remove();
-        // });
 
         /* Create bar plot using data from csv */
         var drawDetails = function (nHTML, type) {
@@ -257,9 +242,6 @@
 
           // d3.select("#sentences").innerHTML = "<ul>" + nHTML + "</ul>";
           d3.select("#sentences").html("<ul>" + nHTML + "</ul>");
-
-          // edit bar title
-          d3.select("#bar_chart_title").text('Sample texts classified as "' + type + '"');
         };
       })
       .catch(function (error) {
