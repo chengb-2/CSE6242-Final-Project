@@ -1,0 +1,32 @@
+/* define CSS rules */
+div#bar_chart_title {
+  left: 325px;
+  top: 520px;
+  position: absolute;
+  display: none;
+}
+
+div#sentences {
+  left: 60px;
+  top: 550px;
+  position: absolute;
+  display: none;
+  padding: 2%;
+  max-height: 360px;
+  max-width: 720px;
+  overflow-y: scroll;
+  border: 1px solid blue;
+}
+
+div#tooltip {
+  position: absolute;
+  text-align: center;
+  width: 90px;
+  height: 64px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border-radius: 8px;
+  pointer-events: none;
+  display: none;
+}

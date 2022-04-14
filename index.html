@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<!-- To view in browser: python3 -m http.server 8080 & -->
+<!-- Then visit http://0.0.0.0:8080/interactive.html in your browser -->
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+  <script src="index.js"></script>
+  <meta charset="utf-8" />
+
+  <title>Homepage</title>
+</head>
+
+<body>
+  <script type="text/javascript" src="../lib/d3.v5.min.js"></script>
+  <!-- <script type="text/javascript" src="../lib/d3-dsv.min.js"></script> -->
+
+  <!-- Example hiding an element -->
+  <!-- <g id="" style"display:none;" /> -->
+
+  <!-- Example of styling an element -->
+  <!-- svg_element.style()-->
+
+  <div id="bar_chart_title"></div>
+  <div id="sentences"></div>
+  <div id="tooltip"></div>
+
+  <script>
+    // define the dimensions and margins for the line chart
+    // define the dimensions and margins for the bar chart
+    // Use the same Margin Convention from HW1 Q3: https://poloclub.github.io/cse6242-2022spring-online/hw1/8rEHLaYmr9 _margin_convention.pdf to layout your graph
+    var margin = { top: 100, right: 150, bottom: 50, left: 100 },
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom,
+      color = d3.schemeCategory10;
+
+    // Define the div for the tooltip
+    var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+
+    // append svg element to the body of the page
+    // set dimensions and position of the svg element
+    let svg = d3
+      .select("body")
+      .append("svg")
+      .attr("id", "histogram")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("id", "container")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // add line chart title
+    svg
+      .append("text")
+      .attr("id", "line_chart_title")
+      .attr("x", width / 2)
+      .attr("y", -50)
+      .attr("text-anchor", "middle")
+      .style("font-size", "24")
+      .text("Distribution of classified sentences");
+
+    // Fetch the data
+    var pathToCsv = "data/davison_predict.csv";
+
+    d3.dsv(",", pathToCsv, function (d) {
+      return {
+        // format data attributes if required
+        // name: d.name,
+        // year: +d.year,
+        // Rating: Math.floor(+d["average_rating"]),
+        // Rated: +d["users_rated"],
+        input_string: d.input_string,
+        lewd: d.lewd,
+        offensive: d.offensive,
+        intent: d.intent,
+        group: d.group,
+      };
+    })
+      .then(function (data) {
+        console.log("data", data); // you should see the data in your browser's developer tools console
+
+        // count the number of different stereotypes
+        var lewd = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
+        var offensive = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
+        var intent = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
+        var group = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
+
+        var dict = [
+          { type: "Lewd", count: 0, input: [], color: 0, label: 0 },
+          { type: "Offensive", count: 0, input: [], color: 4, label: 1 },
+          { type: "Intent", count: 0, input: [], color: 8, label: 2 },
+          { type: "Group", count: 0, input: [], color: 9, label: 3 },
+        ];
+
+        for (i = 0; i < data.length; i++) {
+          if (data[i].lewd == "Y") {
+            dict[0].input.push(data[i].input_string);
+            dict[0].count += 1;
+
+            temp = [dict[0].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
+            lewd.push(temp);
+          }
+          if (data[i].offensive == "Y") {
+            dict[1].input.push(data[i].input_string);
+            dict[1].count += 1;
+
+            temp = [dict[1].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
+            offensive.push(temp);
+          }
+          if (data[i].intent == "Y") {
+            dict[2].input.push(data[i].input_string);
+            dict[2].count += 1;
+
+            temp = [dict[2].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
+            intent.push(temp);
+          }
+          if (data[i].group == "Y") {
+            dict[3].input.push(data[i].input_string);
+            dict[3].count += 1;
+
+            temp = [dict[3].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
+            group.push(temp);
+          }
+        }
+
+        max_count = Math.max(Math.max(Math.max(dict[0].count, dict[1].count), dict[2].count), dict[3].count);
+        console.log("dict", dict);
+
+        function makeTableHTML(myArray) {
+          var result = "<table border=1>";
+          for (var i = 0; i < myArray.length; i++) {
+            result += "<tr>";
+            for (var j = 0; j < myArray[i].length; j++) {
+              result += "<td>" + myArray[i][j] + "</td>";
+            }
+            result += "</tr>";
+          }
+          result += "</table>";
+
+          return result;
+        }
+
+        lewd = makeTableHTML(lewd);
+        offensive = makeTableHTML(offensive);
+        intent = makeTableHTML(intent);
+        group = makeTableHTML(group);
+
+        // 这行以上全是数据处理
+
+        // map function
+        var mapped = dict.map((d) => {
+          return {
+            type: d.type,
+            count: d.count,
+            input: d.input,
+            color: d.color,
+            label: d.label,
+          };
+        });
+
+        // append x and y axises
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.5);
+        var y = d3.scaleLinear().range([height, 0]);
+        x.domain(mapped.map((d) => d.type));
+        y.domain([0, max_count]);
+
+        svg
+          .append("g")
+          .attr("id", "x-axis-lines")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+
+        svg.append("g").attr("id", "y-axis-lines").call(d3.axisLeft(y));
+
+        // append bars
+        svg
+          .selectAll("bar")
+          .data(mapped)
+          .enter()
+          .append("rect")
+          .attr("x", (d) => x(d.type))
+          .attr("width", x.bandwidth())
+          .attr("y", (d) => y(d.count))
+          .attr("height", (d) => height - y(d.count))
+          .style("fill", (d) => color[d.color])
+          .on("mouseover", function (d) {
+            d3.select("#tooltip").transition().duration(200).style("opacity", 0.9).style("display", "block");
+            d3.select("#tooltip")
+              .html(d.count + " samples <br/><br/>" + "Click for more information")
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 28 + "px");
+          })
+          .on("mouseout", function (d) {
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0).style("display", "none");
+          })
+          .on("click", function (d) {
+            d3.select("#bar_chart_title").style("display", "block");
+            d3.select("#sentences").style("display", "block");
+            d3.select("#bar_chart").style("display", "block");
+            d3.select("#bar_chart").selectAll("*").style("display", "block");
+            drawDetails(eval(d.type.toLowerCase()), d.type.toLowerCase());
+          });
+
+        // .on("mouseover", function (d) {
+        //   // enlarge circle to show selected
+        //   d3.select(this).style("fill", (d) => color[3]);
+        //   drawDetails(d.key, d.rating_id);
+
+        //   // draw bar chart
+        //   // if (d.count != 0) {
+        // d3.select("#bar_chart").style("display", "block");
+        // d3.select("#bar_chart").selectAll("*").style("display", "block");
+
+        //   // drawDetails(d.key, d.rating_id);
+        //   // }
+        // })
+        // .on("mouseout", function (d) {
+        //   d3.select(this).style("fill", (d) => color[d.color]);
+        //   // d3.select("#bar_chart").style("display", "none");
+        //   // d3.select("#bar_chart").selectAll("*").style("display", "none");
+        //   // d3.select("#bars").selectAll("*").exit().remove();
+        // });
+
+        /* Create bar plot using data from csv */
+        var drawDetails = function (nHTML, type) {
+          // // find all sentences in the given type
+          // var sentence = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
+          // number = 1;
+          // for (i = 0; i < data.length; i++) {
+          //   code = "data[i]." + type;
+          //   if (eval(code) == "Y") {
+          //     temp = [number, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
+          //     sentence.push(temp);
+          //     number += 1;
+          //   }
+          // }
+          // console.log("sentence", sentence);
+
+          // convert 2d array to HTML table
+          // function makeTableHTML(myArray) {
+          //   var result = "<table border=1>";
+          //   for (var i = 0; i < myArray.length; i++) {
+          //     result += "<tr>";
+          //     for (var j = 0; j < myArray[i].length; j++) {
+          //       result += "<td>" + myArray[i][j] + "</td>";
+          //     }
+          //     result += "</tr>";
+          //   }
+          //   result += "</table>";
+
+          //   return result;
+          // }
+
+          // nHTML = makeTableHTML(sentence);
+          console.log("nHTML", nHTML);
+
+          // d3.select("#sentences").innerHTML = "<ul>" + nHTML + "</ul>";
+          d3.select("#sentences").html("<ul>" + nHTML + "</ul>");
+
+          // edit bar title
+          d3.select("#bar_chart_title").text('Sample texts classified as "' + type + '"');
+        };
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  </script>
+</body>
