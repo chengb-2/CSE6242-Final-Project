@@ -28,3 +28,7 @@ div#tooltip {
   pointer-events: none;
   display: none;
 }
+
+.axis {
+  font: 14px sans-serif;
+}

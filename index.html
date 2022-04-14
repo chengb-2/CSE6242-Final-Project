@@ -16,7 +16,7 @@
 
 <body>
   <script src="https://unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
-  <!-- <script type="text/javascript" src="../lib/d3.v5.min.js"></script> -->
+  <!-- <script type="text/javascript" src="lib/d3.v5.min.js"></script> -->
   <!-- <script type="text/javascript" src="../lib/d3-dsv.min.js"></script> -->
 
   <!-- Example hiding an element -->
@@ -162,10 +162,11 @@
         svg
           .append("g")
           .attr("id", "x-axis-lines")
+          .attr("class", "axis")
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x));
 
-        svg.append("g").attr("id", "y-axis-lines").call(d3.axisLeft(y));
+        svg.append("g").attr("id", "y-axis-lines").attr("class", "axis").call(d3.axisLeft(y));
 
         // append bars
         svg
