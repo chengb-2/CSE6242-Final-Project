@@ -16,6 +16,7 @@
 
 <body>
   <script src="https://unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
+  <script src="js/venn.min.js"></script>
   <!-- <script type="text/javascript" src="lib/d3.v5.min.js"></script> -->
   <!-- <script type="text/javascript" src="../lib/d3-dsv.min.js"></script> -->
 
@@ -27,6 +28,9 @@
 
   <div id="sentences" class="table-responsive"></div>
   <div id="tooltip"></div>
+  <h3 style="text-align: center;">Composition</h3>
+  <div id="venn"></div>
+  <div id="svg"></div>
 
   <script>
     // define the dimensions and margins for the line chart
@@ -43,7 +47,7 @@
     // append svg element to the body of the page
     // set dimensions and position of the svg element
     let svg = d3
-      .select("body")
+      .select("#svg")
       .append("svg")
       .attr("id", "histogram")
       .attr("width", width + margin.left + margin.right)
@@ -84,6 +88,23 @@
         var intent = [];
         var group = [];
 
+        var sets = [ {"sets": [0], "label": "Lewd", "size": 0},
+          {"sets": [1], "label": "Offensive", "size": 0},
+          {"sets": [0, 1], "size": 0},
+          {"sets": [2], "label": "Intent", "size": 0},
+          {"sets": [0, 2], "size": 0},
+          {"sets": [1, 2], "size": 0},
+          {"sets": [0, 1, 2], "size": 0},
+          {"sets": [3], "label": "Group", "size": 0},
+          {"sets": [0, 3], "size": 0},
+          {"sets": [1, 3], "size": 0},
+          {"sets": [0, 1, 3], "size": 0},
+          {"sets": [2, 3], "size": 0},
+          {"sets": [0, 2, 3], "size": 0},
+          {"sets": [1, 2, 3], "size": 0},
+          {"sets": [0, 1, 2, 3], "size": 0}
+        ];
+
         var dict = [
           { type: "Lewd", count: 0, color: 0, label: 0 },
           { type: "Offensive", count: 0, color: 4, label: 1 },
@@ -92,21 +113,33 @@
         ];
 
         for (i = 0; i < data.length; i++) {
+          var encode = 0;
           if (data[i].lewd == "Y") {
             dict[0].count += 1;
             lewd.push([dict[0].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            sets[0].size += 1;
+            encode += 1;
           }
           if (data[i].offensive == "Y") {
             dict[1].count += 1;
             offensive.push([dict[1].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            sets[1].size += 1;
+            encode += 2;
           }
           if (data[i].intent == "Y") {
             dict[2].count += 1;
             intent.push([dict[2].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            sets[3].size += 1;
+            encode += 4;
           }
           if (data[i].group == "Y") {
             dict[3].count += 1;
             group.push([dict[3].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            sets[7].size += 1;
+            encode += 8;
+          }
+          if (encode > 0) {
+            sets[encode-1].size += 1;
           }
         }
 
@@ -232,6 +265,58 @@
           // d3.select("#sentences").innerHTML = "<ul>" + nHTML + "</ul>";
           d3.select("#sentences").html("<ul>" + nHTML + "</ul>");
         };
+
+        // Venn Diagram
+
+        // sets.forEach((d) => {
+        //   d.size += 1;
+        // })
+        console.log(sets);
+
+        var chart = venn.VennDiagram()
+                 .width(500)
+                 .height(500);
+
+        var div = d3.select("#venn")
+        div.datum(sets).call(chart);
+
+        var tooltip = d3.select("body").append("div")
+            .attr("class", "venntooltip");
+
+        div.selectAll("path")
+            .style("stroke-opacity", 0)
+            .style("stroke", "#fff")
+            .style("stroke-width", 3)
+
+        div.selectAll("g")
+            .on("mouseover", function(d, i) {
+                // sort all the areas relative to the current item
+                venn.sortAreas(div, d);
+
+                // Display a tooltip with the current size
+                tooltip.transition().duration(400).style("opacity", .9);
+                tooltip.text(d.size + " users");
+
+                // highlight the current path
+                var selection = d3.select(this).transition("tooltip").duration(400);
+                selection.select("path")
+                    .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+                    .style("stroke-opacity", 1);
+            })
+
+            .on("mousemove", function() {
+                tooltip.style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+            })
+
+            .on("mouseout", function(d, i) {
+                tooltip.transition().duration(400).style("opacity", 0);
+                var selection = d3.select(this).transition("tooltip").duration(400);
+                selection.select("path")
+                    .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+                    .style("stroke-opacity", 0);
+            });
+
       })
       .catch(function (error) {
         console.log(error);

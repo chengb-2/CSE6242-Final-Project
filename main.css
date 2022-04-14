@@ -29,6 +29,27 @@ div#tooltip {
   display: none;
 }
 
+div#venn {
+  left: 860px;
+  top: 50px;
+  position: absolute;
+  padding: 2%;
+  max-height: 360px;
+  max-width: 720px;
+}
+
+.venntooltip {
+  position: absolute;
+  text-align: center;
+  width: 90px;
+  height: 18px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
 .axis {
   font: 14px sans-serif;
 }
