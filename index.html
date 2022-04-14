@@ -84,40 +84,28 @@
         var group = [];
 
         var dict = [
-          { type: "Lewd", count: 0, input: [], color: 0, label: 0 },
-          { type: "Offensive", count: 0, input: [], color: 4, label: 1 },
-          { type: "Intent", count: 0, input: [], color: 8, label: 2 },
-          { type: "Group", count: 0, input: [], color: 9, label: 3 },
+          { type: "Lewd", count: 0, color: 0, label: 0 },
+          { type: "Offensive", count: 0, color: 4, label: 1 },
+          { type: "Intent", count: 0, color: 8, label: 2 },
+          { type: "Group", count: 0, color: 9, label: 3 },
         ];
 
         for (i = 0; i < data.length; i++) {
           if (data[i].lewd == "Y") {
-            dict[0].input.push(data[i].input_string);
             dict[0].count += 1;
-
-            temp = [dict[0].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
-            lewd.push(temp);
+            lewd.push([dict[0].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
           }
           if (data[i].offensive == "Y") {
-            dict[1].input.push(data[i].input_string);
             dict[1].count += 1;
-
-            temp = [dict[1].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
-            offensive.push(temp);
+            offensive.push([dict[1].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
           }
           if (data[i].intent == "Y") {
-            dict[2].input.push(data[i].input_string);
             dict[2].count += 1;
-
-            temp = [dict[2].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
-            intent.push(temp);
+            intent.push([dict[2].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
           }
           if (data[i].group == "Y") {
-            dict[3].input.push(data[i].input_string);
             dict[3].count += 1;
-
-            temp = [dict[3].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
-            group.push(temp);
+            group.push([dict[3].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
           }
         }
 
@@ -159,7 +147,6 @@
           return {
             type: d.type,
             count: d.count,
-            input: d.input,
             color: d.color,
             label: d.label,
           };
