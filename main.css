@@ -24,10 +24,9 @@ html {
 
 div#sentences {
   position: relative;
-  left: 80px;
-  padding: 2%;
+  margin-top: 50px;
   max-height: 400px;
-  max-width: 800px;
+  max-width: 100%;
   display: none;
 }
 
@@ -44,16 +43,13 @@ div#tooltip {
   display: none;
 }
 
-/* div#venn {
-  left: 860px;
-  top: 50px;
-  position: absolute;
+div#venn {
   padding: 2%;
   max-height: 360px;
   max-width: 720px;
-} */
+}
 
-/* .venntooltip {
+.venntooltip {
   position: absolute;
   text-align: center;
   width: 90px;
@@ -63,7 +59,7 @@ div#tooltip {
   background: lightsteelblue;
   border-radius: 8px;
   pointer-events: none;
-} */
+}
 
 .axis {
   font: 14px sans-serif;
@@ -77,7 +73,7 @@ body {
 
 .about-image {
   position: absolute;
-  top: -70px;
+  top: -50px;
 }
 
 #venn {
@@ -86,7 +82,7 @@ body {
 
 /* scroll bar  */
 #sentences::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
   background-color: #f5f5f5;
 }
 
