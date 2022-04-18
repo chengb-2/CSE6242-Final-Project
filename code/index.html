@@ -42,7 +42,7 @@
 
   <body>
     <script src="https://unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
-    <script src="js/venn.min.js"></script>
+    <script src="lib/venn.min.js"></script>
 
     <!-- <script type="text/javascript" src="lib/d3.v5.min.js"></script> -->
     <!-- <script type="text/javascript" src="../lib/d3-dsv.min.js"></script> -->
@@ -144,7 +144,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#histogram"
+              <a class="nav-link" href="#line_chart_title"
                 >3. Histogram</a
               >
             </li>
@@ -173,8 +173,7 @@
         </div>
         <div class="col-md-6 image-container about-image">
           <img
-            class=""
-            src="https://raw.githubusercontent.com/chengb-2/CSE6242-Final-Project/main/toxic_language-removebg-preview.png"
+            src="image/toxic_language-removebg-preview.png"
           />
         </div>
       </div>
@@ -471,6 +470,11 @@
                 .style("left", d3.event.pageX + "px")
                 .style("top", d3.event.pageY - 28 + "px");
             })
+            .on("mousemove", function () {
+              d3.select("#tooltip")
+                .style("left", d3.event.pageX + 10 + "px")
+                .style("top", d3.event.pageY - 70 + "px");
+            })
             .on("mouseout", function (d) {
               d3.select("#tooltip")
                 .transition()
@@ -567,11 +571,17 @@
                 .style("opacity", 0.9);
               tooltip.text(d.size + " users");
 
+              d3.select(".venntooltip").style(
+                "display",
+                "block"
+              );
+
               // highlight the current path
               var selection = d3
                 .select(this)
                 .transition("tooltip")
-                .duration(400);
+                .duration(400)
+                .style("display", "block");
               selection
                 .select("path")
                 .style(
