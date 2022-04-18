@@ -1,8 +1,15 @@
+<<<<<<< HEAD
+
 # Toxic Language Analysis
 
 [![Website status](https://img.shields.io/website-up-down-green-red/https/chengb-2.github.io/CSE6242-Final-Project?label=Website%20status)](https://chengb-2.github.io/CSE6242-Final-Project/)
 
 ## 📃 DESCRIPTION
+
+We will introduce our toxic language detection model which aims to detect whether a given statement \
+implies stereotypes or social biases and provide detailed explanations for the implied harms.
+
+The visualization website is based on d3.js.
 
 ## 🔨 INSTALLATION
 
