@@ -5,18 +5,32 @@
 <head>
   <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
-  <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
   <script src="index.js"></script>
+  <script src="https://unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
+  <script src="js/venn.min.js"></script>
   <meta charset="utf-8" />
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="./main.css"
+  />
 
   <title>Homepage</title>
 </head>
 
-<body>
-  <script src="https://unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
-  <script src="js/venn.min.js"></script>
+<body
+  style="
+    position: absolute;
+    height: 100%;
+    top: auto;
+    left: 180px;
+  "
+>
   <!-- <script type="text/javascript" src="lib/d3.v5.min.js"></script> -->
   <!-- <script type="text/javascript" src="../lib/d3-dsv.min.js"></script> -->
 
@@ -25,24 +39,104 @@
 
   <!-- Example of styling an element -->
   <!-- svg_element.style()-->
+  <!-- Navigation Menu-->
+  <!-- Nav class 1 -->
+  <div
+    id="mySidenav"
+    class="sidenav"
+    style="
+      background-color: blanchedalmond;
+      height: 100%;
+      width: 150px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      overflow-x: hidden;
+      font-size: large;
+    "
+  >
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+    <a href="#introduction">Introduction</a><br />
+    <a href="#venn">Venn Diagram</a><br />
+    <a href="#histogram">Histogram</a><br />
+  </div>
 
-  <div id="sentences" class="table-responsive"></div>
+  <row
+    id="introduction"
+    class="col-sm-6 col-md-6 col-xs-6"
+    style="float: left; width: 100%"
+  >
+    <div
+      class="thumbnail"
+      style="border: none; background: white"
+    >
+      <div class="col-sm-6 col-md-6 col-xs-12">
+        <h3>Introduction</h3>
+        <p style="font-size: 18px; color: #03225c">
+          We will introduce our toxic language detection
+          model which aims to detect whether a given
+          statement implies stereotypes and social bias and
+          provide detailed explana- tions for the implied
+          harms. Using the SBF-GPT based classification
+          model [15 ], we will focus our analyses on three
+          existing English Twitter data sets annotated for
+          toxic or abusive language from Founta et al. [5],
+          Waseem and Hovy [17] and Davidson et al . [3].Then
+          we will visualize the output via a
+          user-interactive web app.
+        </p>
+      </div>
+      <div
+        class="col-sm-6 col-md-6 col-xs-12 image-container"
+      >
+        <img
+          src="https://raw.githubusercontent.com/chengb-2/CSE6242-Final-Project/main/toxic_language-removebg-preview.png"
+          style="
+            height: 500px;
+            margin-left: -15px;
+            margin-top: -100px;
+          "
+        />
+      </div>
+    </div>
+  </row>
+
+  <div id="venn" style="top: 1300px; left: 0px"></div>
+
+  <div>
+    <div id="svg"></div>
+    <br />
+    <div
+      id="sentences"
+      class="table-responsive"
+      style="margin-top: 350px"
+    ></div>
+  </div>
+
   <div id="tooltip"></div>
-  <h3 style="text-align: center;">Composition</h3>
-  <div id="venn"></div>
-  <div id="svg"></div>
+  <!-- <h3 style="text-align: center">Composition</h3> -->
 
   <script>
     // define the dimensions and margins for the line chart
     // define the dimensions and margins for the bar chart
     // Use the same Margin Convention from HW1 Q3: https://poloclub.github.io/cse6242-2022spring-online/hw1/8rEHLaYmr9 _margin_convention.pdf to layout your graph
-    var margin = { top: 100, right: 150, bottom: 50, left: 100 },
+    var margin = {
+        top: 100,
+        right: 150,
+        bottom: 50,
+        left: 100,
+      },
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom,
       color = d3.schemeCategory10;
 
     // Define the div for the tooltip
-    var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+    var div = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
     // append svg element to the body of the page
     // set dimensions and position of the svg element
@@ -54,7 +148,10 @@
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("id", "container")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr(
+        "transform",
+        "translate(" + margin.left + "," + margin.top + ")"
+      );
 
     // add line chart title
     svg
@@ -88,26 +185,32 @@
         var intent = [];
         var group = [];
 
-        var sets = [ {"sets": [0], "label": "Lewd", "size": 0},
-          {"sets": [1], "label": "Offensive", "size": 0},
-          {"sets": [0, 1], "size": 0},
-          {"sets": [2], "label": "Intent", "size": 0},
-          {"sets": [0, 2], "size": 0},
-          {"sets": [1, 2], "size": 0},
-          {"sets": [0, 1, 2], "size": 0},
-          {"sets": [3], "label": "Group", "size": 0},
-          {"sets": [0, 3], "size": 0},
-          {"sets": [1, 3], "size": 0},
-          {"sets": [0, 1, 3], "size": 0},
-          {"sets": [2, 3], "size": 0},
-          {"sets": [0, 2, 3], "size": 0},
-          {"sets": [1, 2, 3], "size": 0},
-          {"sets": [0, 1, 2, 3], "size": 0}
+        var sets = [
+          { sets: [0], label: "Lewd", size: 0 },
+          { sets: [1], label: "Offensive", size: 0 },
+          { sets: [0, 1], size: 0 },
+          { sets: [2], label: "Intent", size: 0 },
+          { sets: [0, 2], size: 0 },
+          { sets: [1, 2], size: 0 },
+          { sets: [0, 1, 2], size: 0 },
+          { sets: [3], label: "Group", size: 0 },
+          { sets: [0, 3], size: 0 },
+          { sets: [1, 3], size: 0 },
+          { sets: [0, 1, 3], size: 0 },
+          { sets: [2, 3], size: 0 },
+          { sets: [0, 2, 3], size: 0 },
+          { sets: [1, 2, 3], size: 0 },
+          { sets: [0, 1, 2, 3], size: 0 },
         ];
 
         var dict = [
           { type: "Lewd", count: 0, color: 0, label: 0 },
-          { type: "Offensive", count: 0, color: 4, label: 1 },
+          {
+            type: "Offensive",
+            count: 0,
+            color: 4,
+            label: 1,
+          },
           { type: "Intent", count: 0, color: 8, label: 2 },
           { type: "Group", count: 0, color: 9, label: 3 },
         ];
@@ -116,38 +219,75 @@
           var encode = 0;
           if (data[i].lewd == "Y") {
             dict[0].count += 1;
-            lewd.push([dict[0].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            lewd.push([
+              dict[0].count,
+              data[i].input_string,
+              data[i].lewd,
+              data[i].offensive,
+              data[i].intent,
+              data[i].group,
+            ]);
             sets[0].size += 1;
             encode += 1;
           }
           if (data[i].offensive == "Y") {
             dict[1].count += 1;
-            offensive.push([dict[1].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            offensive.push([
+              dict[1].count,
+              data[i].input_string,
+              data[i].lewd,
+              data[i].offensive,
+              data[i].intent,
+              data[i].group,
+            ]);
             sets[1].size += 1;
             encode += 2;
           }
           if (data[i].intent == "Y") {
             dict[2].count += 1;
-            intent.push([dict[2].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            intent.push([
+              dict[2].count,
+              data[i].input_string,
+              data[i].lewd,
+              data[i].offensive,
+              data[i].intent,
+              data[i].group,
+            ]);
             sets[3].size += 1;
             encode += 4;
           }
           if (data[i].group == "Y") {
             dict[3].count += 1;
-            group.push([dict[3].count, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group]);
+            group.push([
+              dict[3].count,
+              data[i].input_string,
+              data[i].lewd,
+              data[i].offensive,
+              data[i].intent,
+              data[i].group,
+            ]);
             sets[7].size += 1;
             encode += 8;
           }
           if (encode > 0) {
-            sets[encode-1].size += 1;
+            sets[encode - 1].size += 1;
           }
         }
 
-        max_count = Math.max(Math.max(Math.max(dict[0].count, dict[1].count), dict[2].count), dict[3].count);
+        max_count = Math.max(
+          Math.max(
+            Math.max(dict[0].count, dict[1].count),
+            dict[2].count
+          ),
+          dict[3].count
+        );
         console.log("dict", dict);
 
         function makeTableHTML(myArray, type) {
-          var result = '<table class="table table-striped"><caption>Sample texts classified as "' + type + '"</caption>';
+          var result =
+            '<table class="table table-striped"><caption>Sample texts classified as "' +
+            type +
+            '"</caption>';
           result +=
             '<thead><tr>\
             <th scope="col">#</th>\
@@ -187,7 +327,10 @@
         });
 
         // append x and y axises
-        var x = d3.scaleBand().rangeRound([0, width]).padding(0.5);
+        var x = d3
+          .scaleBand()
+          .rangeRound([0, width])
+          .padding(0.5);
         var y = d3.scaleLinear().range([height, 0]);
         x.domain(mapped.map((d) => d.type));
         y.domain([0, max_count]);
@@ -199,7 +342,11 @@
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x));
 
-        svg.append("g").attr("id", "y-axis-lines").attr("class", "axis").call(d3.axisLeft(y));
+        svg
+          .append("g")
+          .attr("id", "y-axis-lines")
+          .attr("class", "axis")
+          .call(d3.axisLeft(y));
 
         // append bars
         svg
@@ -213,57 +360,49 @@
           .attr("height", (d) => height - y(d.count))
           .style("fill", (d) => color[d.color])
           .on("mouseover", function (d) {
-            d3.select("#tooltip").transition().duration(200).style("opacity", 0.9).style("display", "block");
             d3.select("#tooltip")
-              .html(d.count + " samples <br/><br/>" + "Click for more information")
+              .transition()
+              .duration(200)
+              .style("opacity", 0.9)
+              .style("display", "block");
+            d3.select("#tooltip")
+              .html(
+                d.count +
+                  " samples <br/><br/>" +
+                  "Click for more information"
+              )
               .style("left", d3.event.pageX + "px")
               .style("top", d3.event.pageY - 28 + "px");
           })
           .on("mouseout", function (d) {
-            d3.select("#tooltip").transition().duration(500).style("opacity", 0).style("display", "none");
+            d3.select("#tooltip")
+              .transition()
+              .duration(500)
+              .style("opacity", 0)
+              .style("display", "none");
           })
           .on("click", function (d) {
-            d3.select("#sentences").style("display", "block");
-            d3.select("#bar_chart").style("display", "block");
-            d3.select("#bar_chart").selectAll("*").style("display", "block");
-            drawDetails(eval(d.type.toLowerCase()), d.type.toLowerCase());
+            d3.select("#sentences").style(
+              "display",
+              "block"
+            );
+
+            drawDetails(
+              svg,
+              eval(d.type.toLowerCase()),
+              d.type.toLowerCase()
+            );
           });
 
         /* Create bar plot using data from csv */
-        var drawDetails = function (nHTML, type) {
-          // // find all sentences in the given type
-          // var sentence = [["No.", "Input Sentence", "Lewd", "Offensive", "Intent", "Group"]];
-          // number = 1;
-          // for (i = 0; i < data.length; i++) {
-          //   code = "data[i]." + type;
-          //   if (eval(code) == "Y") {
-          //     temp = [number, data[i].input_string, data[i].lewd, data[i].offensive, data[i].intent, data[i].group];
-          //     sentence.push(temp);
-          //     number += 1;
-          //   }
-          // }
-          // console.log("sentence", sentence);
-
-          // convert 2d array to HTML table
-          // function makeTableHTML(myArray) {
-          //   var result = "<table border=1>";
-          //   for (var i = 0; i < myArray.length; i++) {
-          //     result += "<tr>";
-          //     for (var j = 0; j < myArray[i].length; j++) {
-          //       result += "<td>" + myArray[i][j] + "</td>";
-          //     }
-          //     result += "</tr>";
-          //   }
-          //   result += "</table>";
-
-          //   return result;
-          // }
-
+        var drawDetails = function (svg, nHTML, type) {
           // nHTML = makeTableHTML(sentence);
           console.log("nHTML", nHTML);
 
           // d3.select("#sentences").innerHTML = "<ul>" + nHTML + "</ul>";
-          d3.select("#sentences").html("<ul>" + nHTML + "</ul>");
+          d3.select("#sentences").html(
+            "<ul>" + nHTML + "</ul>"
+          );
         };
 
         // Venn Diagram
@@ -273,50 +412,75 @@
         // })
         console.log(sets);
 
-        var chart = venn.VennDiagram()
-                 .width(500)
-                 .height(500);
+        var chart = venn
+          .VennDiagram()
+          .width(500)
+          .height(500);
 
-        var div = d3.select("#venn")
+        var div = d3.select("#venn");
         div.datum(sets).call(chart);
 
-        var tooltip = d3.select("body").append("div")
-            .attr("class", "venntooltip");
+        var tooltip = d3
+          .select("body")
+          .append("div")
+          .attr("class", "venntooltip");
 
-        div.selectAll("path")
-            .style("stroke-opacity", 0)
-            .style("stroke", "#fff")
-            .style("stroke-width", 3)
+        div
+          .selectAll("path")
+          .style("stroke-opacity", 0)
+          .style("stroke", "#fff")
+          .style("stroke-width", 3);
 
-        div.selectAll("g")
-            .on("mouseover", function(d, i) {
-                // sort all the areas relative to the current item
-                venn.sortAreas(div, d);
+        div
+          .selectAll("g")
+          .on("mouseover", function (d, i) {
+            // sort all the areas relative to the current item
+            venn.sortAreas(div, d);
 
-                // Display a tooltip with the current size
-                tooltip.transition().duration(400).style("opacity", .9);
-                tooltip.text(d.size + " users");
+            // Display a tooltip with the current size
+            tooltip
+              .transition()
+              .duration(400)
+              .style("opacity", 0.9);
+            tooltip.text(d.size + " users");
 
-                // highlight the current path
-                var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path")
-                    .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
-                    .style("stroke-opacity", 1);
-            })
+            // highlight the current path
+            var selection = d3
+              .select(this)
+              .transition("tooltip")
+              .duration(400);
+            selection
+              .select("path")
+              .style(
+                "fill-opacity",
+                d.sets.length == 1 ? 0.4 : 0.1
+              )
+              .style("stroke-opacity", 1);
+          })
 
-            .on("mousemove", function() {
-                tooltip.style("left", (d3.event.pageX) + "px")
-                      .style("top", (d3.event.pageY - 28) + "px");
-            })
+          .on("mousemove", function () {
+            tooltip
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 28 + "px");
+          })
 
-            .on("mouseout", function(d, i) {
-                tooltip.transition().duration(400).style("opacity", 0);
-                var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path")
-                    .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
-                    .style("stroke-opacity", 0);
-            });
-
+          .on("mouseout", function (d, i) {
+            tooltip
+              .transition()
+              .duration(400)
+              .style("opacity", 0);
+            var selection = d3
+              .select(this)
+              .transition("tooltip")
+              .duration(400);
+            selection
+              .select("path")
+              .style(
+                "fill-opacity",
+                d.sets.length == 1 ? 0.25 : 0.0
+              )
+              .style("stroke-opacity", 0);
+          });
       })
       .catch(function (error) {
         console.log(error);
