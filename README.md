@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Toxic Language Analysis
 
 [![Website status](https://img.shields.io/website-up-down-green-red/https/chengb-2.github.io/CSE6242-Final-Project?label=Website%20status)](https://chengb-2.github.io/CSE6242-Final-Project/)
@@ -28,5 +26,7 @@ Unzip the folder and follow the execution instruction.
 3. Go to `http://localhost:8888/code/`. (Chrome recommended)
 
 ## DEMO VIDEO
+
+placeholder
 
 <!-- placeholder -->
