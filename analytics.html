@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- To view in browser: python3 -m http.server 8080 & -->
+  <!-- Then visit http://0.0.0.0:8080/interactive.html in your browser -->
+  <head>
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
+    
+    <meta charset="utf-8" />
+    <title>Analytics</title>
+    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+    
+    <script src="https://unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+
+    <link href="lib/nouislider.min.css" rel="stylesheet">
+    <script src="lib/nouislider.min.js"></script>
+    <style>
+      #slider-range {
+        width: 960px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <p>
+      <div id="slider-range"></div>
+    </p>
+    <p style="color:red">Warning: This page may contain sensitive content and offensive language.</p>
+    <label for="slider-range", id="slider-range-value"></label>
+
+    <div id="svg" style="background-color:rgb(248, 248, 248)"></div>
+
+    <div id="wordcloud" style="background-color:rgb(248, 248, 248)">
+      <button type="button", id="start-cloud">Generate Word Cloud</button>
+    </div>
+    
+    <script src="analytics.js"></script>
+    <script>
+      // Define Slider
+      var rangeSlider = document.getElementById('slider-range');
+
+      noUiSlider.create(rangeSlider, {
+          start: [300, 700],
+          tooltips: [true, true],
+          step: 1,
+          margin: 5,
+          behaviour: "drag",
+          connect: true,
+          
+          range: {
+              'min': 0,
+              'max': 1000
+          }
+      });
+
+      var rangeSliderValueElement = document.getElementById('slider-range-value');
+
+      rangeSlider.noUiSlider.on('update', function (values, handle) {
+        start = +values[0];
+        end = +values[1];
+        rangeSliderValueElement.innerHTML = "Exploring text entries from   " + start + "   to   " + end + "  . Word Cloud Generation make take a few seconds.";
+        update();
+      });
+
+      function setRange(start, end) {
+        start = start;
+        end = end;
+        rangeSlider.noUiSlider.set([start, end])
+      }
+    </script>
+    
+  </body>
+
+  </html>
