@@ -134,18 +134,13 @@
         >
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#introduction"
-                >1. Introduction</a
+              <a class="nav-link" href="index.html"
+                >Introduction</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#venn"
-                >2. Venn Diagram</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#line_chart_title"
-                >3. Histogram</a
+              <a class="nav-link" href="visualization.html"
+                >Data Analysis and Visualization</a
               >
             </li>
           </ul>
@@ -154,28 +149,36 @@
     </div>
 
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h3 id="introduction">Introduction</h3>
-          <p>
-            We will introduce our toxic language detection
-            model which aims to detect whether a given
-            statement implies stereotypes and social bias
-            and provide detailed explana- tions for the
-            implied harms. Using the SBF-GPT based
-            classification model [15 ], we will focus our
-            analyses on three existing English Twitter data
-            sets annotated for toxic or abusive language
-            from Founta et al. [5], Waseem and Hovy [17] and
-            Davidson et al . [3].Then we will visualize the
-            output via a user-interactive web app.
+      <div class="jumbotron">
+        <h1 class="display-4">Toxic Language Classifer</h1>
+        <p class="lead">on "Million Twitter Dataset"</p>
+        <hr class="my-4">
+        <p>We will introduce our toxic language detection
+          model which aims to detect whether a given
+          statement implies stereotypes and social bias
+          and provide detailed explana- tions for the
+          implied harms. Using the SBF-GPT based
+          classification model [15 ], we will focus our
+          analyses on three existing English Twitter data
+          sets annotated for toxic or abusive language
+          from Founta et al. [5], Waseem and Hovy [17] and
+          Davidson et al . [3].Then we will visualize the
+          output via a user-interactive web app.</p>
+          <!-- <img
+            src="image/toxic_language-removebg-preview.png"
+          /> -->
+          <p class="lead mt-3">
+            <a class="btn btn-primary btn-lg" href="visualization.html" role="button">Enter</a>
           </p>
-        </div>
-        <div class="col-md-6 image-container about-image">
-          <img
-            src="https://github.com/chengb-2/CSE6242-Final-Project/raw/main/code/image/toxic_language-removebg-preview.png"
-          />
-        </div>
+          <p>Click on bar graph to see samples in Davidson[3] dataset. (Warning: may contain inappropriate or explicit language)</p>
+        <div
+          id="svg"
+          class="row justify-content-center"
+        ></div>
+        <div
+          id="sentences"
+          class="table-responsive row justify-content-center"
+        ></div>
       </div>
     </div>
 
@@ -487,10 +490,14 @@
                 "display",
                 "block"
               );
+              $('html, body').animate({
+                  scrollTop: $("#sentences").offset().top
+              }, 500);
               drawDetails(
                 eval(d.type.toLowerCase()),
                 d.type.toLowerCase()
               );
+              
             });
 
           /* Create bar plot using data from csv */
@@ -532,88 +539,6 @@
             );
           };
 
-          // Venn Diagram
-
-          // sets.forEach((d) => {
-          //   d.size += 1;
-          // })
-          console.log(sets);
-
-          var chart = venn
-            .VennDiagram()
-            .width(500)
-            .height(500);
-
-          var div = d3.select("#venn");
-          div.datum(sets).call(chart);
-
-          var tooltip = d3
-            .select("body")
-            .append("div")
-            .attr("class", "venntooltip");
-
-          div
-            .selectAll("path")
-            .style("stroke-opacity", 0)
-            .style("stroke", "#fff")
-            .style("stroke-width", 3);
-
-          div
-            .selectAll("g")
-            .on("mouseover", function (d, i) {
-              // sort all the areas relative to the current item
-              venn.sortAreas(div, d);
-
-              // Display a tooltip with the current size
-              tooltip
-                .transition()
-                .duration(400)
-                .style("opacity", 0.9);
-              tooltip.text(d.size + " users");
-
-              d3.select(".venntooltip").style(
-                "display",
-                "block"
-              );
-
-              // highlight the current path
-              var selection = d3
-                .select(this)
-                .transition("tooltip")
-                .duration(400)
-                .style("display", "block");
-              selection
-                .select("path")
-                .style(
-                  "fill-opacity",
-                  d.sets.length == 1 ? 0.4 : 0.1
-                )
-                .style("stroke-opacity", 1);
-            })
-
-            .on("mousemove", function () {
-              tooltip
-                .style("left", d3.event.pageX + "px")
-                .style("top", d3.event.pageY - 28 + "px");
-            })
-
-            .on("mouseout", function (d, i) {
-              tooltip
-                .transition()
-                .duration(400)
-                .style("opacity", 0);
-              var selection = d3
-                .select(this)
-                .transition("tooltip")
-                .duration(400);
-              selection
-                .select("path")
-                .style(
-                  "fill-opacity",
-                  d.sets.length == 1 ? 0.25 : 0.0
-                )
-                .style("stroke-opacity", 0);
-            });
         })
         .catch(function (error) {
           console.log(error);
