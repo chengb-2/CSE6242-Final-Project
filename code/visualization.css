@@ -1,0 +1,16 @@
+.tooltip {
+    position: absolute;
+    text-align: center;
+    text-anchor: middle;
+    margin: auto;
+    padding: 5px;
+    font: 10px sans-serif;
+    background: lightsteelblue;
+    border-radius: 8px;
+    pointer-events: none;
+    display: none;
+}
+
+.tick line {
+    opacity: 0.2;
+}

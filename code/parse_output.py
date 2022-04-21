@@ -10,8 +10,8 @@ temp_dict = collections.defaultdict(list)
 count = [0, 0, 0, 0]
 
 # name of text and csv file
-in_file = "data/founta_predict.txt"
-out_file = "data/founta_predict.csv"
+in_file = "data/sent_predict.txt"
+out_file = "data/sent_predict.csv"
 
 # read rows of input file
 with open(in_file, 'r', encoding='utf-8') as textfile:
