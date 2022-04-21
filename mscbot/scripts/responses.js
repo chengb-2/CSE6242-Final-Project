@@ -21,6 +21,10 @@ function getBotResponse(input) {
         mode: 'cors',
         body: body,
         headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, PUT, DELETE, GET, OPTIONS',
+          'Access-Control-Request-Method': '*',
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
           'Content-Type': 'application/json'
         }    
       }
