@@ -68,13 +68,11 @@ div#venn {
 
 body {
   padding-top: 80px !important;
-  padding-left: 80px !important;
   background-color: rgb(248, 249, 250) !important;
 }
 
-.about-image {
-  position: absolute;
-  top: -50px;
+.jumbotron {
+  padding-right: 100px;
 }
 
 #venn {
