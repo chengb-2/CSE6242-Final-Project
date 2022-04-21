@@ -61,7 +61,7 @@
         type="button"
         class="collapsible"
       >
-        Write a message!
+        Try it out
         <i
           id="chat-icon"
           style="color: #fff"
@@ -151,11 +151,10 @@
     <div class="container">
       <div class="jumbotron">
         <h1 class="display-4">Toxic Language Classifer</h1>
-        <p class="lead">on "Million Twitter Dataset"</p>
+        <p class="lead">on Twitter Dataset</p>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6">
+        <hr class="my-4">
+          <!-- <div class="row"> -->
               <h3 id="introduction">Introduction</h3>
               <p>
                 In this page, we employ the SBF-GPT based
@@ -170,26 +169,26 @@
                 will visualize the output via a
                 user-interactive web app.
               </p>
-            </div>
-            <div
+            <!-- <div
               class="col-md-6 image-container about-image"
             >
               <img
                 src="image/toxic_language-removebg-preview.png"
               />
-            </div>
-          </div>
-        </div>
+            </div> -->
+          <!-- </div> -->
+          <p class="lead mt-3">
+            <a
+              class="btn btn-dark btn-lg"
+              href="visualization.html"
+              role="button"
+              >Enter</a
+            >
+          </p>
+        </hr>
         <hr class="my-4" />
 
-        <!-- <p class="lead mt-3">
-          <a
-            class="btn btn-primary btn-lg"
-            href="visualization.html"
-            role="button"
-            >Enter</a
-          >
-        </p> -->
+        
         <h3>Preliminary Data Analysis</h3>
         <p>
           The bar chart below demonstrates the
@@ -299,7 +298,7 @@
       })
         .then(function (data) {
           // you should see the data in your browser's developer tools console
-          console.log("data", data);
+          // console.log("data", data);
 
           // count the number of different stereotypes
           var lewd = [];
@@ -408,7 +407,7 @@
             ),
             dict[3].count
           );
-          console.log("dict", dict);
+          // console.log("dict", dict);
 
           function makeTableHTML(myArray, type) {
             var result =
@@ -564,7 +563,7 @@
             // }
 
             // nHTML = makeTableHTML(sentence);
-            console.log("nHTML", nHTML);
+            // console.log("nHTML", nHTML);
 
             // d3.select("#sentences").innerHTML = "<ul>" + nHTML + "</ul>";
             d3.select("#sentences").html(

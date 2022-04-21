@@ -55,7 +55,8 @@ var responseID = 0;
 
 // Retrieves the response
 function getHardResponse(userText) {
-  let botResponse = getBotResponse(userText, responseID);
+  getBotResponse(userText, responseID);
+  let botResponse = "loading";
   let botHtml =
     '<p class="botText"><span id="response_' + responseID +'">' +
     botResponse +

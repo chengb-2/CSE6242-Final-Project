@@ -20,10 +20,9 @@ function clearWordCloud() {
 
 function drawWordCloud() {
     clearWordCloud();
-    wordcloudFont = $("#wordcloud-font").attr('value');
-    var baseSize = $("#wordcloud-size").attr('value');
-    var include_at = $("#wordcloud-include").attr('checked');
-    console.log(baseSize, include_at)
+    wordcloudFont = document.getElementById("wordcloud-font").value;
+    var baseSize = document.getElementById("wordcloud-size").value;
+    var include_at = document.getElementById("wordcloud-include").checked;
 
     var wordList = [];
     dataFiltered.forEach(d => {
@@ -40,7 +39,6 @@ function drawWordCloud() {
         })
         wordList = wordList.concat(words);
     })
-    console.log(wordList)
     d3.layout.cloud()
         .size([width, height])
         .spiral("archimedean")
