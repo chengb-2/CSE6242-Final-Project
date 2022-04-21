@@ -2,7 +2,7 @@ import csv
 import collections
 
 # field names
-fields = ['input_string', 'lewd', 'offensive', 'intent', 'group']
+fields = ['input_string', 'lewd', 'offensive', 'intent', 'group', 'implication']
 
 # data rows of text file
 rows = []
@@ -10,8 +10,8 @@ temp_dict = collections.defaultdict(list)
 count = [0, 0, 0, 0]
 
 # name of text and csv file
-in_file = "data/founta_predict.txt"
-out_file = "data/founta_predict.csv"
+in_file = "data/sent_predict.txt"
+out_file = "data/sent_predict.csv"
 
 # read rows of input file
 with open(in_file, 'r', encoding='utf-8') as textfile:
@@ -20,10 +20,9 @@ with open(in_file, 'r', encoding='utf-8') as textfile:
     for line in lines:
         seg = line.split("[SEP]")
         input_string = seg[0][6:-1]
-        lewd, offensive, intent, group = seg[1][5], seg[1][12], seg[1][19], seg[1][26]
-        rows.append([input_string, lewd, offensive, intent, group])
-
-        temp_dict[lewd+offensive+intent+group].append(input_string)
+        lewd, offensive, intent, group, implication = seg[1][5], seg[1][12], seg[1][19], seg[1][29:-1], seg[2][1:-1]
+        rows.append([input_string, lewd, offensive, intent, group, implication])
+        temp_dict[lewd+offensive+intent+group+implication].append(input_string)
         if lewd == "Y":
             count[0] += 1
         if offensive == "Y":
@@ -39,12 +38,12 @@ print([len(temp_dict[key]) for key in temp_dict.keys()])
 print(count)
 
 # # writing to csv file
-# with open(out_file, 'w', newline='', encoding='utf-8') as csvfile:
-#     # creating a csv writer object
-#     csvwriter = csv.writer(csvfile)
+with open(out_file, 'w', newline='', encoding='utf-8') as csvfile:
+    # creating a csv writer object
+    csvwriter = csv.writer(csvfile)
 
-#     # writing the fields
-#     csvwriter.writerow(fields)
+    # writing the fields
+    csvwriter.writerow(fields)
 
-#     # writing the data rows
-#     csvwriter.writerows(rows)
+    # writing the data rows
+    csvwriter.writerows(rows)

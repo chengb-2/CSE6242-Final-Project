@@ -122,9 +122,9 @@
 
     <div class="container fixed-top">
       <nav
-        class="navbar navbar-expand-lg navbar-light bg-light"
+        class="navbar navbar-expand-lg navbar-light bg-light fluid"
       >
-        <a class="navbar-brand" href="#"
+        <a class="navbar-brand" href="index.html"
           >Toxic Language Analysis</a
         >
 
@@ -135,12 +135,12 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <a class="nav-link" href="index.html"
-                >Introduction</a
+                >Introduction & Preliminary Data Analysis</a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="visualization.html"
-                >Data Analysis and Visualization</a
+                >Detailed Analysis and Visualization</a
               >
             </li>
           </ul>
@@ -152,25 +152,56 @@
       <div class="jumbotron">
         <h1 class="display-4">Toxic Language Classifer</h1>
         <p class="lead">on "Million Twitter Dataset"</p>
-        <hr class="my-4">
-        <p>We will introduce our toxic language detection
-          model which aims to detect whether a given
-          statement implies stereotypes and social bias
-          and provide detailed explana- tions for the
-          implied harms. Using the SBF-GPT based
-          classification model [15 ], we will focus our
-          analyses on three existing English Twitter data
-          sets annotated for toxic or abusive language
-          from Founta et al. [5], Waseem and Hovy [17] and
-          Davidson et al . [3].Then we will visualize the
-          output via a user-interactive web app.</p>
-          <!-- <img
-            src="image/toxic_language-removebg-preview.png"
-          /> -->
-          <p class="lead mt-3">
-            <a class="btn btn-primary btn-lg" href="visualization.html" role="button">Enter</a>
-          </p>
-          <p>Click on bar graph to see samples in Davidson[3] dataset. (Warning: may contain inappropriate or explicit language)</p>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h3 id="introduction">Introduction</h3>
+              <p>
+                In this page, we employ the SBF-GPT based
+                toxic language classification model to
+                detect whether a given statement implies
+                stereotypes and social bias and provide
+                detailed explanations for the implied harms.
+                we will focus our analyses on three existing
+                English Twitter data sets annotated for
+                toxic or abusive language from Founta et al,
+                Waseem and Hovy and Davidson et al. Then we
+                will visualize the output via a
+                user-interactive web app.
+              </p>
+            </div>
+            <div
+              class="col-md-6 image-container about-image"
+            >
+              <img
+                src="image/toxic_language-removebg-preview.png"
+              />
+            </div>
+          </div>
+        </div>
+        <hr class="my-4" />
+
+        <!-- <p class="lead mt-3">
+          <a
+            class="btn btn-primary btn-lg"
+            href="visualization.html"
+            role="button"
+            >Enter</a
+          >
+        </p> -->
+        <h3>Preliminary Data Analysis</h3>
+        <p>
+          The bar chart below demonstrates the
+          classification output of the Davidson dataset both
+          quantitively and qualitatively. It not only
+          displays the number of toxic sentences related to
+          different types of biases, but also lets users to
+          see the original toxic sentences of certain biases
+          by a single click of the corresponding bars.
+          (Warning: may contain inappropriate or explicit
+          language)
+        </p>
         <div
           id="svg"
           class="row justify-content-center"
@@ -490,14 +521,16 @@
                 "display",
                 "block"
               );
-              $('html, body').animate({
-                  scrollTop: $("#sentences").offset().top
-              }, 500);
+              $("html, body").animate(
+                {
+                  scrollTop: $("#sentences").offset().top,
+                },
+                500
+              );
               drawDetails(
                 eval(d.type.toLowerCase()),
                 d.type.toLowerCase()
               );
-              
             });
 
           /* Create bar plot using data from csv */
@@ -538,7 +571,6 @@
               "<ul>" + nHTML + "</ul>"
             );
           };
-
         })
         .catch(function (error) {
           console.log(error);
