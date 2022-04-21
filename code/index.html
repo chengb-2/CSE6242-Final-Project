@@ -55,7 +55,7 @@
     <!-- Just an image -->
 
     <!-- CHAT BAR BLOCK -->
-    <div class="chat-bar-collapsible">
+    <!-- <div class="chat-bar-collapsible">
       <button
         id="chat-button"
         type="button"
@@ -67,58 +67,58 @@
           style="color: #fff"
           class="fa fa-fw fa-comments-o"
         ></i>
-      </button>
+      </button> -->
 
-      <div class="content">
-        <div class="full-chat-block">
-          <!-- Message Container -->
-          <div class="outer-container">
-            <div class="chat-container">
-              <!-- Messages -->
-              <div id="chatbox">
-                <h5 id="chat-timestamp"></h5>
-                <p id="botStarterMessage" class="botText">
-                  <span>Loading...</span>
-                </p>
+    <div class="content">
+      <div class="full-chat-block">
+        <!-- Message Container -->
+        <div class="outer-container">
+          <div class="chat-container">
+            <!-- Messages -->
+            <div id="chatbox">
+              <h5 id="chat-timestamp"></h5>
+              <p id="botStarterMessage" class="botText">
+                <span>Loading...</span>
+              </p>
+            </div>
+
+            <!-- User input box -->
+            <div class="chat-bar-input-block">
+              <div id="userInput">
+                <input
+                  id="textInput"
+                  class="input-box"
+                  type="text"
+                  name="msg"
+                  placeholder="Tap 'Enter' to send a message"
+                />
+                <p></p>
               </div>
 
-              <!-- User input box -->
-              <div class="chat-bar-input-block">
-                <div id="userInput">
-                  <input
-                    id="textInput"
-                    class="input-box"
-                    type="text"
-                    name="msg"
-                    placeholder="Tap 'Enter' to send a message"
-                  />
-                  <p></p>
-                </div>
-
-                <div class="chat-bar-icons">
-                  <!-- <i
+              <div class="chat-bar-icons">
+                <!-- <i
                     id="chat-icon"
                     style="color: crimson"
                     class="fa fa-fw fa-heart"
                     onclick="heartButton()"
                   ></i> -->
-                  <i
-                    id="chat-icon"
-                    style="color: #333"
-                    class="fa fa-fw fa-send"
-                    onclick="sendButton()"
-                  ></i>
-                </div>
+                <i
+                  id="chat-icon"
+                  style="color: #333"
+                  class="fa fa-fw fa-send"
+                  onclick="sendButton()"
+                ></i>
               </div>
+            </div>
 
-              <div id="chat-bar-bottom">
-                <p></p>
-              </div>
+            <div id="chat-bar-bottom">
+              <p></p>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- </div> -->
 
     <div class="container fixed-top">
       <nav
@@ -155,41 +155,40 @@
 
         <div class="container">
           <div class="row">
-            <div class="col-md-6">
-              <h3 id="introduction">Introduction</h3>
-              <p>
-                In this page, we employ the SBF-GPT based
-                toxic language classification model to
-                detect whether a given statement implies
-                stereotypes and social bias and provide
-                detailed explanations for the implied harms.
-                we will focus our analyses on three existing
-                English Twitter data sets annotated for
-                toxic or abusive language from Founta et al,
-                Waseem and Hovy and Davidson et al. Then we
-                will visualize the output via a
-                user-interactive web app.
-              </p>
-            </div>
-            <div
-              class="col-md-6 image-container about-image"
-            >
+            <!-- <div class="col-md-6"> -->
+            <h3 id="introduction">Introduction</h3>
+            <p>
+              In this page, we employ the SBF-GPT based
+              toxic language classification model to detect
+              whether a given statement implies stereotypes
+              and social bias and provide detailed
+              explanations for the implied harms. we will
+              focus our analyses on three existing English
+              Twitter data sets annotated for toxic or
+              abusive language from Founta et al, Waseem and
+              Hovy and Davidson et al. Then we will
+              visualize the output via a user-interactive
+              web app.
+            </p>
+            <p class="lead mt-3">
+              <a
+                class="btn btn-primary btn-lg btn-block btn-dark"
+                href="visualization.html"
+                role="button"
+                >Enter</a
+              >
+            </p>
+            <!-- </div> -->
+            <!-- <div class="col-md-6 image-container">
               <img
+                class="about-image"
                 src="image/toxic_language-removebg-preview.png"
               />
-            </div>
+            </div> -->
           </div>
         </div>
         <hr class="my-4" />
 
-        <!-- <p class="lead mt-3">
-          <a
-            class="btn btn-primary btn-lg"
-            href="visualization.html"
-            role="button"
-            >Enter</a
-          >
-        </p> -->
         <h3>Preliminary Data Analysis</h3>
         <p>
           The bar chart below demonstrates the

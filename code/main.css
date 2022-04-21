@@ -94,3 +94,7 @@ body {
   outline: 1px solid slategrey;
   border-radius: 4px;
 }
+
+.about-image {
+  height: 275px;
+}
