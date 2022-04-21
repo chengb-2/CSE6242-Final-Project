@@ -1,7 +1,8 @@
 const api_path = "https://bk8v326t6g.execute-api.us-east-1.amazonaws.com/default/sbf-infer";
 var userInput;
+var response;
 
-function getBotResponse(input) {
+async function getBotResponse(input, id) {
   //rock paper scissors
   console.log("User input: ", input);
   if (input == "sup") {
@@ -21,16 +22,13 @@ function getBotResponse(input) {
         mode: 'cors',
         body: body,
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, PUT, DELETE, GET, OPTIONS',
-          'Access-Control-Request-Method': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
           'Content-Type': 'application/json'
         }    
       }
     ).then(response => response.json()).then(res => {
-      console.log(res);
-      return res.output
-    })
+      console.log(res.output);
+      $("#response_" + id).text(res.output);
+    });
+    return 'loading';
   }
 }

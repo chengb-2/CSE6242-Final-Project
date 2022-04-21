@@ -51,14 +51,17 @@ function firstBotMessage() {
 
 firstBotMessage();
 
+var responseID = 0;
+
 // Retrieves the response
 function getHardResponse(userText) {
-  let botResponse = getBotResponse(userText);
+  let botResponse = getBotResponse(userText, responseID);
   let botHtml =
-    '<p class="botText"><span>' +
+    '<p class="botText"><span id="response_' + responseID +'">' +
     botResponse +
     "</span></p>";
   $("#chatbox").append(botHtml);
+  responseID++;
 
   document
     .getElementById("chat-bar-bottom")
