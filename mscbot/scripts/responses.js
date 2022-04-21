@@ -1,5 +1,5 @@
-const api_path = "https://wuqxv7gtdd.execute-api.us-east-1.amazonaws.com/default/sbf-infer";
-const api_key = "ShufLKMXDa6398N62C5Gi8YYnsoAh8rJa2uKuwwv";
+const api_path = "https://bk8v326t6g.execute-api.us-east-1.amazonaws.com/default/sbf-infer";
+var userInput;
 
 function getBotResponse(input) {
   //rock paper scissors
@@ -14,23 +14,19 @@ function getBotResponse(input) {
   } else if (input == "goodbye") {
     return "Talk to you later!";
   } else {
-    return userInput(input);
+    userInput = input;
+    body = JSON.stringify({ 'input': userInput });
+    fetch(api_path, {
+        method: 'POST',
+        mode: 'cors',
+        body: body,
+        headers: {
+          'Content-Type': 'application/json'
+        }    
+      }
+    ).then(response => response.json()).then(res => {
+      console.log(res);
+      return res.output
+    })
   }
-}
-
-const userInput = async (input) => {
-  const response = await fetch(api_path, {
-    method: 'POST',
-    body: {
-      input: input
-    },
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': api_key
-    }
-  });
-  const res = await response.json(); //extract JSON from the http response
-  console.log(res)
-  // do something with myJson
-  return res.output;
 }
