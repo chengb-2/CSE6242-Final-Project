@@ -9,7 +9,7 @@ var rangeSliderValueElement = document.getElementById('slider-range-value');
 var rangeSlider = document.getElementById('slider-range');
 function initSlider() {
     noUiSlider.create(rangeSlider, {
-        start: [dcount * 0, dcount * 1],
+        start: [dcount * 0.5, dcount * 0.505],
         tooltips: [true, true],
         step: 1,
         margin: 5,
